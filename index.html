@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Reality Show Gifs</title>
+</head>
+
+<style type="text/css">
+    button,
+    div,
+    form,
+    input {
+      margin: 5px;
+    }
+
+    </style>
+
+<body>
+  <button data-person="NeNe Leakes">NeNe Leakes</button>
+  <button data-person="Cardi B">
+    Cardi B
+  </button>
+  <button data-person="Stevie J">
+    Stevie J
+  </button>
+  <button data-person="Kandi Burrus">
+    Kandi Burrus
+  </button>
+  
+
+  <button data-person="Evelyn Lozada">
+    Evelyn Lozada
+  </button>
+  <button data-person="Tiny Harris">
+    Tiny Harris
+  </button>
+ 
+  <form id="show-form">
+    <label for="show-input">Add a Reality Star</label>
+    <input type="text" id="show-input"><br>
+
+    
+    <input id="add-star" type="submit" value="Add a Reality Star">
+  </form>
+
+  <div id="gifs">
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+  
+    $("button").on("click", function() {
+
+      var person = $(this).attr("data-person");
+
+      
+      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        person + "&api_key=MknNlDNokZHaqBCqk1tmLpXjImZfnM7P&limit=10";
+        
+        
+
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      })
+        .then(function(response) {
+     
+          var results = response.data;
+
+          
+          for (var i = 0; i < results.length; i++) {
+
+            
+            if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
+              
+              var gifDiv = $("<div class='item'>");
+
+              
+              var rating = results[i].rating;
+
+              
+              var p = $("<p>").text("Rating: " + rating);
+
+              var personImage = $("<img>");
+
+              personImage.attr("src", results[i].images.fixed_height.url);
+              
+              gifDiv.append(p);
+              
+              gifDiv.append(personImage);
+
+              
+              $("#gifs").prepend(gifDiv);
+            }
+
+          }
+
+        // here would be a function that would make an api call from the user input to generate gifs //
+        });
+    });
+  </script>
+</body>
+
+</html>
